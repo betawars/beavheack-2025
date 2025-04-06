@@ -1,0 +1,19 @@
+.main{
+    display: flex;
+    flex-direction: column;
+}
+
+.head{
+
+    font-size: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.body{
+    padding: 10px;
+    display: flex;
+    word-wrap:normal;
+}
