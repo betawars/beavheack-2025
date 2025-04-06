@@ -112,7 +112,7 @@ export default function SignIn(props) {
 
       //send data to api
       sessionStorage.setItem("isActive",true)
-      sessionStorage.setItem("userName","Shashank")
+      sessionStorage.setItem("userName","dev")
       if (pathName == "/signin"){
         router.push("/")
       }
@@ -131,12 +131,12 @@ export default function SignIn(props) {
 
     if (!formData.email) {
       errors.email = "Email is required";
-    } else if (formData.email !== "shashank"){
+    } else if (formData.email !== "dev@oregonstate.edu"){
       errors.email = "Incorrect email";
     }
     if (!formData.password) {
       errors.password = "Password is required";
-    } else if(formData.password !== "123"){
+    } else if(formData.password !== "123456"){
       errors.password = "Incorrect password";
     }
 
