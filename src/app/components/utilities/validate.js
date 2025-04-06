@@ -18,7 +18,7 @@ export default function validate(formData,setFormErrors){
     if (!formData.lastName) errors.lastName = "Last name is required";
     if (!formData.phoneNo) {
         errors.phoneNo = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phoneNo)) {
+    } else if (formData.phoneNo.length<10) {
         errors.phoneNo = "Phone number must be 10 digits";
     }
 

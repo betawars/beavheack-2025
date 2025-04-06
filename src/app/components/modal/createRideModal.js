@@ -27,6 +27,7 @@ const CreateRideModal = ({ open, closeModal }) => {
         if (validate(formData,setFormErrors)) {
 
             //send data to api
+            alert("Ride has been created")
             closeModal();
         }
     };

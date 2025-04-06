@@ -2,6 +2,7 @@
     padding: 5vh;
     display: flex;
     flex-direction: column;
+	height: 90vh;
 }
 
 .create-button-div{

@@ -79,9 +79,11 @@ export default function SignUp(props) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setFormErrors((prev) => ({ ...prev, [name]: "" }));
+    validate(formData, setFormErrors)
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (validate(formData, setFormErrors)) {
 
       //send data to api
@@ -147,8 +149,9 @@ export default function SignUp(props) {
   // };
 
   return (
-    <AppTheme {...props}>
-      {/* <CssBaseline enableColorScheme /> */}
+    //<AppTheme {...props}>
+      // {/* <CssBaseline enableColorScheme /> */}
+      <div>
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
@@ -164,7 +167,7 @@ export default function SignUp(props) {
             component="form"
             sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}
           >
-            <FormLabel htmlFor="email">Email</FormLabel>
+            <FormLabel htmlFor="email" sx={{marginBottom:0}}>Email</FormLabel>
             <TextField
               autoComplete="email"
               name="email"
@@ -176,7 +179,7 @@ export default function SignUp(props) {
               error={!!formErrors.email}
               helperText={formErrors.email}
             />
-            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormLabel htmlFor="password" sx={{marginBottom:0}}>Password</FormLabel>
             <TextField
               autoComplete="password"
               name="password"
@@ -188,7 +191,7 @@ export default function SignUp(props) {
               error={!!formErrors.password}
               helperText={formErrors.password}
             />
-            <FormLabel htmlFor="firstName">First Name</FormLabel>
+            <FormLabel htmlFor="firstName" sx={{marginBottom:0}}>First Name</FormLabel>
             <TextField
               autoComplete="firstName"
               name="firstName"
@@ -200,10 +203,10 @@ export default function SignUp(props) {
               error={!!formErrors.firstName}
               helperText={formErrors.firstName}
             />
-            <FormLabel htmlFor="lastname">Last Name</FormLabel>
+            <FormLabel htmlFor="lastname" sx={{marginBottom:0}}>Last Name</FormLabel>
             <TextField
               autoComplete="lastname"
-              name="lastname"
+              name="lastName"
               type='text'
               required
               fullWidth
@@ -212,11 +215,11 @@ export default function SignUp(props) {
               error={!!formErrors.lastName}
               helperText={formErrors.lastName}
             />
-            <FormLabel htmlFor="number">Number</FormLabel>
+            <FormLabel htmlFor="phoneNo" sx={{marginBottom:0}}>Number</FormLabel>
             <TextField
-              autoComplete="number"
-              type='number'
-              name="number"
+              autoComplete="phoneNo"
+              type='phoneNo'
+              name="phoneNo"
               required
               fullWidth
               value={formData.phoneNo}
@@ -224,7 +227,7 @@ export default function SignUp(props) {
               error={!!formErrors.phoneNo}
               helperText={formErrors.phoneNo}
             />
-            <FormLabel htmlFor="university">University</FormLabel>
+            <FormLabel htmlFor="university" sx={{marginBottom:0}} >University</FormLabel>
             <TextField
               autoComplete="university"
               name="university"
@@ -236,7 +239,7 @@ export default function SignUp(props) {
               error={!!formErrors.university}
               helperText={formErrors.university}
             />
-            <FormLabel htmlFor="isDriver">Are you a driver?</FormLabel>
+            <FormLabel htmlFor="isDriver" sx={{marginBottom:0}}>Are you a driver?</FormLabel>
             <TextField
               autoComplete="isDriver"
               name="isDriver"
@@ -390,6 +393,7 @@ export default function SignUp(props) {
               fullWidth
               variant="contained"
               onClick={handleSubmit}
+              sx={{marginTop:1.5}}
             >
               Sign up
             </Button>
@@ -411,6 +415,7 @@ export default function SignUp(props) {
           </Box>
         </Card>
       </SignUpContainer>
-    </AppTheme>
+      </div>
+    // </AppTheme>
   );
 }
