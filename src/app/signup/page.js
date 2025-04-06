@@ -1,5 +1,5 @@
 "use client"
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -14,10 +14,10 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import "./style.css"
-// import AppTheme from '../shared-theme/AppTheme';
-// import ColorModeSelect from '../shared-theme/ColorModeSelect';
-// import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
+import AppTheme from '../shared-theme/AppTheme';
+import ColorModeSelect from '../shared-theme/ColorModeSelect';
+import validate from '../components/utilities/validate';
+import { MenuItem } from '@mui/material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -62,70 +62,97 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp(props) {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
 
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const name = document.getElementById('name');
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    phoneNo: "",
+    university: "",
+    isDriver: ""
+  });
 
-    let isValid = true;
+  const [formErrors, setFormErrors] = useState({});
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
-    }
-
-    return isValid;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
-      event.preventDefault();
-      return;
+  const handleSubmit = () => {
+    if (validate(formData, setFormErrors)) {
+
+      //send data to api
+      closeModal();
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      lastName: data.get('lastName'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
+  // const [emailError, setEmailError] = React.useState(false);
+  // const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  // const [passwordError, setPasswordError] = React.useState(false);
+  // const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  // const [nameError, setNameError] = React.useState(false);
+  // const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+
+  // const validateInputs = () => {
+  //   const email = document.getElementById('email');
+  //   const password = document.getElementById('password');
+  //   const name = document.getElementById('name');
+
+  //   let isValid = true;
+
+  //   if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+  //     setEmailError(true);
+  //     setEmailErrorMessage('Please enter a valid email address.');
+  //     isValid = false;
+  //   } else {
+  //     setEmailError(false);
+  //     setEmailErrorMessage('');
+  //   }
+
+  //   if (!password.value || password.value.length < 6) {
+  //     setPasswordError(true);
+  //     setPasswordErrorMessage('Password must be at least 6 characters long.');
+  //     isValid = false;
+  //   } else {
+  //     setPasswordError(false);
+  //     setPasswordErrorMessage('');
+  //   }
+
+  //   if (!name.value || name.value.length < 1) {
+  //     setNameError(true);
+  //     setNameErrorMessage('Name is required.');
+  //     isValid = false;
+  //   } else {
+  //     setNameError(false);
+  //     setNameErrorMessage('');
+  //   }
+
+  //   return isValid;
+  // };
+
+  // const handleSubmit = (event) => {
+  //   if (nameError || emailError || passwordError) {
+  //     event.preventDefault();
+  //     return;
+  //   }
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     name: data.get('name'),
+  //     lastName: data.get('lastName'),
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  // };
 
   return (
-    // <AppTheme {...props}>
-    <div>
-      <CssBaseline enableColorScheme />
+    <AppTheme {...props}>
+      {/* <CssBaseline enableColorScheme /> */}
+      <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
+          {/* <SitemarkIcon /> */}
           <Typography
             component="h1"
             variant="h4"
@@ -135,10 +162,186 @@ export default function SignUp(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}
           >
-            <FormControl>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <TextField
+              autoComplete="email"
+              name="email"
+              type='email'
+              required
+              fullWidth
+              value={formData.email}
+              onChange={handleChange}
+              error={!!formErrors.email}
+              helperText={formErrors.email}
+            />
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <TextField
+              autoComplete="password"
+              name="password"
+              type='password'
+              required
+              fullWidth
+              value={formData.password}
+              onChange={handleChange}
+              error={!!formErrors.password}
+              helperText={formErrors.password}
+            />
+            <FormLabel htmlFor="firstName">First Name</FormLabel>
+            <TextField
+              autoComplete="firstName"
+              name="firstName"
+              type='text'
+              required
+              fullWidth
+              value={formData.firstName}
+              onChange={handleChange}
+              error={!!formErrors.firstName}
+              helperText={formErrors.firstName}
+            />
+            <FormLabel htmlFor="lastname">Last Name</FormLabel>
+            <TextField
+              autoComplete="lastname"
+              name="lastname"
+              type='text'
+              required
+              fullWidth
+              value={formData.lastName}
+              onChange={handleChange}
+              error={!!formErrors.lastName}
+              helperText={formErrors.lastName}
+            />
+            <FormLabel htmlFor="number">Number</FormLabel>
+            <TextField
+              autoComplete="number"
+              type='number'
+              name="number"
+              required
+              fullWidth
+              value={formData.phoneNo}
+              onChange={handleChange}
+              error={!!formErrors.phoneNo}
+              helperText={formErrors.phoneNo}
+            />
+            <FormLabel htmlFor="university">University</FormLabel>
+            <TextField
+              autoComplete="university"
+              name="university"
+              type='text'
+              required
+              fullWidth
+              value={formData.university}
+              onChange={handleChange}
+              error={!!formErrors.university}
+              helperText={formErrors.university}
+            />
+            <FormLabel htmlFor="isDriver">Are you a driver?</FormLabel>
+            <TextField
+              autoComplete="isDriver"
+              name="isDriver"
+              required
+              fullWidth
+              value={formData.isDriver}
+              onChange={handleChange}
+              error={!!formErrors.isDriver}
+              helperText={formErrors.isDriver}
+            >
+              <MenuItem value="yes">Yes</MenuItem>
+              <MenuItem value="no">No</MenuItem>
+            </TextField>
+            {/* <TextField
+              margin="dense"
+              label="First Name"
+              type="text"
+              name="firstName"
+              fullWidth
+              value={formData.firstName}
+              onChange={handleChange}
+              error={!!formErrors.firstName}
+              helperText={formErrors.firstName}
+            />
+            <TextField
+              margin="dense"
+              label="Email"
+              type="email"
+              name="email"
+              fullWidth
+              value={formData.email}
+              onChange={handleChange}
+              error={!!formErrors.email}
+              helperText={formErrors.email}
+            />
+            <TextField
+              margin="dense"
+              label="Password"
+              type="password"
+              name="password"
+              fullWidth
+              value={formData.password}
+              onChange={handleChange}
+              error={!!formErrors.password}
+              helperText={formErrors.password}
+            />
+            <TextField
+              margin="dense"
+              label="First Name"
+              type="text"
+              name="firstName"
+              fullWidth
+              value={formData.firstName}
+              onChange={handleChange}
+              error={!!formErrors.firstName}
+              helperText={formErrors.firstName}
+            />
+            <TextField
+              margin="dense"
+              label="Last Name"
+              type="text"
+              name="lastName"
+              fullWidth
+              value={formData.lastName}
+              onChange={handleChange}
+              error={!!formErrors.lastName}
+              helperText={formErrors.lastName}
+            />
+            <TextField
+              margin="dense"
+              label="Phone Number"
+              type="number"
+              name="phoneNo"
+              fullWidth
+              value={formData.phoneNo}
+              onChange={handleChange}
+              error={!!formErrors.phoneNo}
+              helperText={formErrors.phoneNo}
+            />
+            <TextField
+              margin="dense"
+              label="University"
+              type="text"
+              name="university"
+              fullWidth
+              value={formData.university}
+              onChange={handleChange}
+              error={!!formErrors.university}
+              helperText={formErrors.university}
+            />
+            <TextField
+              margin="dense"
+              select
+              label="Are you a driver?"
+              name="isDriver"
+              fullWidth
+              value={formData.isDriver}
+              onChange={handleChange}
+              error={!!formErrors.isDriver}
+              helperText={formErrors.isDriver}
+            >
+              <MenuItem value="yes">Yes</MenuItem>
+              <MenuItem value="no">No</MenuItem>
+            </TextField> */}
+            {/* <FormControl>
               <FormLabel htmlFor="name">Full name</FormLabel>
               <TextField
                 autoComplete="name"
@@ -182,12 +385,11 @@ export default function SignUp(props) {
                 helperText={passwordErrorMessage}
                 color={passwordError ? 'error' : 'primary'}
               />
-            </FormControl>
+            </FormControl> */}
             <Button
-              type="submit"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
+              onClick={handleSubmit}
             >
               Sign up
             </Button>
@@ -195,11 +397,20 @@ export default function SignUp(props) {
           <Divider>
             <Typography sx={{ color: 'text.secondary' }}>or</Typography>
           </Divider>
-          <Box>
-            <Typography align='center'>Already a member? <span className='sign-in'>Sign in</span></Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography sx={{ textAlign: 'center' }}>
+              Already have an account?{' '}
+              <Link
+                href="signin"
+                variant="body2"
+                sx={{ alignSelf: 'center' }}
+              >
+                Sign in
+              </Link>
+            </Typography>
           </Box>
         </Card>
       </SignUpContainer>
-      </div>
+    </AppTheme>
   );
 }

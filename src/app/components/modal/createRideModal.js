@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import validate from '../utilities/validate';
 
 const CreateRideModal = ({ open, closeModal }) => {
-
+ 
     const [formData, setFormData] = useState({
         email: "",
         password: "",

@@ -19,7 +19,6 @@ export const metadata = {
 export default function signUpLayout({ children }) {
   return (
       <div>
-          {/* <InnerNav /> */}
           {children}
       </div>
   );
